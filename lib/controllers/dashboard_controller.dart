@@ -17,7 +17,6 @@ class DashboardController extends GetxController {
       tabController.animateTo(index,
           duration: const Duration(seconds: 1), curve: Curves.easeInOutCubic);
       currentPage.value = sideMenu.currentPage;
-      debugPrint('Index: $index');
       debugPrint('CurrentPage: ${currentPage.value}');
     });
     super.onInit();

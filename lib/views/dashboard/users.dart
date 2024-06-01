@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -249,11 +247,11 @@ class AcceptedUserCard extends StatelessWidget {
                                 controller.acceptedUsers[index].email =
                                     emailController.text.trim();
                                 controller.acceptedUsers.refresh();
+                                Get.back();
                               } else if (user != null) {
                                 controller.deleteUser(user, index);
+                                Get.back();
                               }
-                              Timer(
-                                  const Duration(seconds: 2), () => Get.back());
                             },
                           ),
                         ),

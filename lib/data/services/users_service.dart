@@ -80,7 +80,8 @@ class UsersService extends GetxController {
         body: jsonEncode(payload),
       );
       if (response.statusCode == 200) {
-        debugPrint('Approved user: ${user.firstName} ${user.lastName}');
+        debugPrint(
+            '${isRejected ? 'Rejected' : 'Removed'} user: ${user.firstName} ${user.lastName}');
         debugPrint('${response.body} ${response.reasonPhrase}');
         return {'success': true};
       } else {

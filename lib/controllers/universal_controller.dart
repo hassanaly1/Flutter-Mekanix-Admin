@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mechanix_admin/data/services/analytics_service.dart';
 import 'package:mechanix_admin/data/services/users_service.dart';
 import 'package:mechanix_admin/helpers/snackbar.dart';
+import 'package:mechanix_admin/helpers/storage_helper.dart';
 import 'package:mechanix_admin/models/user_model.dart';
 
 class UniversalController extends GetxController {
@@ -12,13 +14,29 @@ class UniversalController extends GetxController {
 
   final UsersService usersService = UsersService();
 
+  final AnalyticsService analyticsService = AnalyticsService();
+
   @override
   void onInit() async {
     super.onInit();
-    await fetchAllUsers();
-    debugPrint('All users: $allUsers');
-    debugPrint('Pending users: $pendingUsers');
-    debugPrint('Accepted users: $acceptedUsers');
+    // await fetchAllUsers();
+    getActivitiesAnalyticsData();
+    getActivitiesCountData();
+    // debugPrint('All users: $allUsers');
+    // debugPrint('Pending users: $pendingUsers');
+    // debugPrint('Accepted users: $acceptedUsers');
+  }
+
+  Future<void> getActivitiesAnalyticsData() async {
+    final result = await analyticsService.getActivitiesAnalyticsData(
+        token: storage.read('token'));
+    if (result['success']) {}
+  }
+
+  Future<void> getActivitiesCountData() async {
+    final result = await analyticsService.getActivitiesCountData(
+        token: storage.read('token'));
+    if (result['success']) {}
   }
 
   void initializeLoadingStates(int count) {
@@ -100,6 +118,7 @@ class UniversalController extends GetxController {
           MySnackBarsHelper.showMessage(
               'User ${user.firstName} ${user.lastName} removed successfully.');
           acceptedUsers.removeAt(index);
+          Get.back();
         }
       } else {
         MySnackBarsHelper.showError(
