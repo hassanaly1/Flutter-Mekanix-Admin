@@ -4,6 +4,8 @@ import 'package:mechanix_admin/data/services/analytics_service.dart';
 import 'package:mechanix_admin/data/services/users_service.dart';
 import 'package:mechanix_admin/helpers/snackbar.dart';
 import 'package:mechanix_admin/helpers/storage_helper.dart';
+import 'package:mechanix_admin/models/analytics_count_model.dart';
+import 'package:mechanix_admin/models/analytics_model.dart';
 import 'package:mechanix_admin/models/user_model.dart';
 
 class UniversalController extends GetxController {
@@ -11,16 +13,43 @@ class UniversalController extends GetxController {
   var allUsers = <User>[].obs;
   var pendingUsers = <User>[].obs;
   var acceptedUsers = <User>[].obs;
+  AnalyticsData analyticsData = AnalyticsData(
+    loginActivity: [],
+    accountCreationActivity: [],
+    engineTask: [],
+    compressorTask: [],
+  );
+
+  var totalUsersCount = 0.obs;
+  var totalVerifiedUsersCount = 0.obs;
+  var totalUnverifiedUsersCount = 0.obs;
+  var approvedAccountCount = 0.obs;
+  var unapprovedAccountCount = 0.obs;
+  var generatorCount = 0.obs;
+  var compressorCount = 0.obs;
+  var engineAssemblyReportContCount = 0.obs;
+  var taskCount = 0.obs;
+  var compressorTaskCount = 0.obs;
+
+  var isLoadingTotalUsers = true.obs;
+  var isLoadingVerifiedUsers = true.obs;
+  var isLoadingUnverifiedUsers = true.obs;
+  var isLoadingApprovedAccount = true.obs;
+  var isLoadingUnapprovedAccount = true.obs;
+  var isLoadingGeneratorCount = true.obs;
+  var isLoadingCompressorCount = true.obs;
+  var isLoadingEngineAssemblyReportContCount = true.obs;
+  var isLoadingTaskCount = true.obs;
+  var isLoadingCompressorTaskCount = true.obs;
 
   final UsersService usersService = UsersService();
-
   final AnalyticsService analyticsService = AnalyticsService();
 
   @override
   void onInit() async {
     super.onInit();
     // await fetchAllUsers();
-    getActivitiesAnalyticsData();
+    // getActivitiesAnalyticsData();
     getActivitiesCountData();
     // debugPrint('All users: $allUsers');
     // debugPrint('Pending users: $pendingUsers');
@@ -30,13 +59,73 @@ class UniversalController extends GetxController {
   Future<void> getActivitiesAnalyticsData() async {
     final result = await analyticsService.getActivitiesAnalyticsData(
         token: storage.read('token'));
-    if (result['success']) {}
+    if (result['success']) {
+      analyticsData = result['data'];
+    } else {
+      print(result['error']);
+      MySnackBarsHelper.showError(
+          result['error'] ?? 'Error fetching Analytics Data');
+    }
   }
 
   Future<void> getActivitiesCountData() async {
+    isLoadingTotalUsers.value = true;
+    isLoadingVerifiedUsers.value = true;
+    isLoadingUnverifiedUsers.value = true;
+    isLoadingApprovedAccount.value = true;
+    isLoadingUnapprovedAccount.value = true;
+    isLoadingGeneratorCount.value = true;
+    isLoadingCompressorCount.value = true;
+    isLoadingEngineAssemblyReportContCount.value = true;
+    isLoadingTaskCount.value = true;
+    isLoadingCompressorTaskCount.value = true;
     final result = await analyticsService.getActivitiesCountData(
         token: storage.read('token'));
-    if (result['success']) {}
+    if (result['success']) {
+      // Extract the ActivtiesCount object from the result
+      ActivtiesCount activitiesCount = result['data'];
+
+      // Assign the values to the observable variables
+      totalUsersCount.value = activitiesCount.totalUsers ?? 0;
+      totalVerifiedUsersCount.value = activitiesCount.verifiedUsers ?? 0;
+      totalUnverifiedUsersCount.value = activitiesCount.unverifiedUsers ?? 0;
+      approvedAccountCount.value = activitiesCount.approvedAccount ?? 0;
+      unapprovedAccountCount.value = activitiesCount.unapprovedAccount ?? 0;
+      generatorCount.value = activitiesCount.generatorCount ?? 0;
+      compressorCount.value = activitiesCount.compressorCount ?? 0;
+      engineAssemblyReportContCount.value =
+          activitiesCount.engineAssemblyReportContCount ?? 0;
+      taskCount.value = activitiesCount.taskCount ?? 0;
+      compressorTaskCount.value = activitiesCount.compressorTaskCount ?? 0;
+
+      isLoadingTotalUsers.value = false;
+      isLoadingVerifiedUsers.value = false;
+      isLoadingUnverifiedUsers.value = false;
+      isLoadingApprovedAccount.value = false;
+      isLoadingUnapprovedAccount.value = false;
+      isLoadingGeneratorCount.value = false;
+      isLoadingCompressorCount.value = false;
+      isLoadingEngineAssemblyReportContCount.value = false;
+      isLoadingTaskCount.value = false;
+      isLoadingCompressorTaskCount.value = false;
+    } else {
+      // Handle the error or failure case
+      if (result.containsKey('error')) {
+        print('Error: ${result['error']}');
+      } else {
+        print('Failed to get activities count data');
+      }
+      isLoadingTotalUsers.value = false;
+      isLoadingVerifiedUsers.value = false;
+      isLoadingUnverifiedUsers.value = false;
+      isLoadingApprovedAccount.value = false;
+      isLoadingUnapprovedAccount.value = false;
+      isLoadingGeneratorCount.value = false;
+      isLoadingCompressorCount.value = false;
+      isLoadingEngineAssemblyReportContCount.value = false;
+      isLoadingTaskCount.value = false;
+      isLoadingCompressorTaskCount.value = false;
+    }
   }
 
   void initializeLoadingStates(int count) {

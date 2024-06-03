@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mechanix_admin/data/api_endpoints.dart';
+import 'package:mechanix_admin/models/analytics_count_model.dart';
+import 'package:mechanix_admin/models/analytics_model.dart';
 
 class AnalyticsService {
   Future<Map<String, dynamic>> getActivitiesAnalyticsData(
@@ -20,9 +22,12 @@ class AnalyticsService {
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
         debugPrint('responseData: ${responseData["data"]}');
-        return {'success': true};
+        final AnalyticsData analyticsData =
+            AnalyticsData.fromJson(responseData['data'] ?? {});
+
+        return {'success': true, 'data': analyticsData};
       } else {
-        return {'success': false};
+        return {'success': false, 'data': null};
       }
     } catch (e) {
       return {'success': false, 'error': e.toString()};
@@ -43,8 +48,10 @@ class AnalyticsService {
       );
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
-        debugPrint('responseData: ${responseData["data"]}');
-        return {'success': true};
+        final Map<String, dynamic> countData = responseData["data"];
+        ActivtiesCount activitiesCount = ActivtiesCount.fromJson(countData);
+
+        return {'success': true, 'data': activitiesCount};
       } else {
         return {'success': false};
       }

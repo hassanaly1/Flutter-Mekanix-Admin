@@ -12,9 +12,10 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    debugPrint('TokenAtStorageAtStart: ${storage.read('token')}');
+    // debugPrint('TokenAtStorageAtStart: ${storage.read('token')}');
     return GetMaterialApp(
       title: 'Mekanix Admin',
       debugShowCheckedModeBanner: false,
