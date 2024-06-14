@@ -16,6 +16,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final AuthController _controller = Get.put(AuthController());
+
   @override
   void dispose() {
     _controller.dispose();
@@ -97,46 +98,54 @@ class _LoginScreenState extends State<LoginScreen> {
                               maxLines: 4,
                             ),
                             Form(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  SizedBox(height: context.height * 0.03),
-                                  ReUsableTextField(
-                                      controller: _controller.emailController,
-                                      hintText: 'Email',
-                                      prefixIcon: Icon(
-                                        Icons.email_outlined,
-                                        color: AppColors.primaryColor,
-                                      )
+                              child: AutofillGroup(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    SizedBox(height: context.height * 0.03),
+                                    ReUsableTextField(
+                                        controller: _controller.emailController,
+                                        hintText: 'Email',
+                                        autofillHints: const [
+                                          AutofillHints.email
+                                        ],
+                                        prefixIcon: Icon(
+                                          Icons.email_outlined,
+                                          color: AppColors.primaryColor,
+                                        )
 
-                                      // validator: (val) =>
-                                      //     AppValidator.validateEmail(value: val),
+                                        // validator: (val) =>
+                                        //     AppValidator.validateEmail(value: val),
+                                        ),
+                                    ReUsableTextField(
+                                        controller:
+                                            _controller.passwordController,
+                                        hintText: 'Password',
+                                        autofillHints: const [
+                                          AutofillHints.password
+                                        ],
+                                        prefixIcon: Icon(
+                                          Icons.lock_open_rounded,
+                                          color: AppColors.primaryColor,
+                                        )
+                                        // validator: (val) =>
+                                        //     AppValidator.validatePassword(value: val),
+                                        ),
+                                    InkWell(
+                                      onTap: () => Get.to(
+                                        () => const ForgetPasswordScreen(),
+                                        transition: Transition.size,
+                                        duration: const Duration(seconds: 1),
                                       ),
-                                  ReUsableTextField(
-                                      controller:
-                                          _controller.passwordController,
-                                      hintText: 'Password',
-                                      prefixIcon: Icon(
-                                        Icons.lock_open_rounded,
-                                        color: AppColors.primaryColor,
-                                      )
-                                      // validator: (val) =>
-                                      //     AppValidator.validatePassword(value: val),
+                                      child: CustomTextWidget(
+                                        text: 'Forget Password?',
+                                        fontSize: 12.0,
+                                        textAlign: TextAlign.center,
+                                        fontWeight: FontWeight.w500,
                                       ),
-                                  InkWell(
-                                    onTap: () => Get.to(
-                                      () => const ForgetPasswordScreen(),
-                                      transition: Transition.size,
-                                      duration: const Duration(seconds: 1),
                                     ),
-                                    child: CustomTextWidget(
-                                      text: 'Forget Password?',
-                                      fontSize: 12.0,
-                                      textAlign: TextAlign.center,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                             SizedBox(height: context.height * 0.03),

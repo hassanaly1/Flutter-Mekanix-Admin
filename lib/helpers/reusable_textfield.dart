@@ -16,21 +16,23 @@ class ReUsableTextField extends StatelessWidget {
   bool obscureText;
   final String? Function(String?)? validator;
   final bool showBackgroundShadow;
-  ReUsableTextField({
-    super.key,
-    this.hintText,
-    this.onTap,
-    this.readOnly,
-    this.prefixIcon,
-    this.suffixIcon,
-    this.maxLines = 1,
-    this.keyboardType,
-    this.controller,
-    this.onChanged,
-    this.obscureText = false,
-    this.showBackgroundShadow = true,
-    this.validator,
-  });
+  Iterable<String>? autofillHints;
+
+  ReUsableTextField(
+      {super.key,
+      this.hintText,
+      this.onTap,
+      this.readOnly,
+      this.prefixIcon,
+      this.suffixIcon,
+      this.maxLines = 1,
+      this.keyboardType,
+      this.controller,
+      this.onChanged,
+      this.obscureText = false,
+      this.showBackgroundShadow = true,
+      this.validator,
+      this.autofillHints});
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,7 @@ class ReUsableTextField extends StatelessWidget {
       showBackgroundShadow: showBackgroundShadow,
       verticalPadding: context.height * 0.015,
       child: TextFormField(
+        autofillHints: autofillHints,
         readOnly: readOnly ?? false,
         onTap: onTap,
         controller: controller,

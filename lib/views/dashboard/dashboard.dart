@@ -110,133 +110,66 @@ class HomeAppbar extends StatelessWidget {
   });
 
   final DashboardController controller = Get.find();
+
   @override
   Widget build(BuildContext context) {
     // var currentPage = sideMenu.currentPage;
 
     return SizedBox(
-      height:
-          context.width > 800 ? context.height * 0.15 : context.height * 0.15,
-      child: context.width > 800
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        height:
+            context.width > 800 ? context.height * 0.15 : context.height * 0.15,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    context.width > 800
-                        ? Image.asset(
-                            'assets/images/app-logo-white.png',
-                            height: context.height * 0.1,
-                            fit: BoxFit.cover,
-                          )
-                        : IconButton(
-                            onPressed: () => sideMenu.changePage(1),
-                            icon: const Icon(Icons.arrow_back_rounded,
-                                color: Colors.white70)),
-                    Obx(
-                      () => CustomTextWidget(
-                        text: controller.currentPage.value == 0
-                            ? 'Admin Panel'
-                            : controller.currentPage.value == 2
-                                ? 'Registrations'
-                                : controller.currentPage.value == 3
-                                    ? 'Users'
-                                    : controller.currentPage.value == 4
-                                        ? 'Subscriptions'
-                                        : controller.currentPage.value == 6
-                                            ? 'Profile'
-                                            : '',
-                        textColor: Colors.white,
-                        fontSize: context.width > 800 ? 20.0 : 18.0,
-                        fontWeight: FontWeight.w600,
-                        maxLines: 2,
-                      ),
-                    ),
-                  ],
+                Image.asset(
+                  'assets/images/app-logo-white.png',
+                  height: context.height * 0.1,
+                  fit: BoxFit.cover,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: context.width > 800
-                      ? Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey.shade200,
-                          ),
-                          child: IconButton(
-                            onPressed: () {
-                              Get.offAll(const LoginScreen());
-                            },
-                            icon: const Icon(Icons.logout_rounded),
-                          ),
-                        )
-                      : ProfileAvatar(
-                          onTap: () => sideMenu.changePage(7),
-                        ),
+                Obx(
+                  () => CustomTextWidget(
+                    text: controller.currentPage.value == 0
+                        ? 'Admin Panel'
+                        : controller.currentPage.value == 2
+                            ? 'Registrations'
+                            : controller.currentPage.value == 3
+                                ? 'Users'
+                                : controller.currentPage.value == 4
+                                    ? 'Subscriptions'
+                                    : controller.currentPage.value == 6
+                                        ? 'Profile'
+                                        : '',
+                    textColor: Colors.white,
+                    fontSize: context.width > 800 ? 20.0 : 18.0,
+                    fontWeight: FontWeight.w600,
+                    maxLines: 2,
+                  ),
                 ),
               ],
-            )
-          : Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      context.width > 800
-                          ? Image.asset(
-                              'assets/images/app-logo-white.png',
-                              height: context.height * 0.1,
-                              fit: BoxFit.cover,
-                            )
-                          : Obx(
-                              () => Visibility(
-                                visible: controller.currentPage.value == 0
-                                    ? false
-                                    : true,
-                                child: IconButton(
-                                  onPressed: () {
-                                    controller.currentPage.value == 0
-                                        ? null
-                                        : sideMenu.changePage(0);
-                                  },
-                                  icon: Icon(Icons.arrow_back_rounded,
-                                      color: controller.currentPage.value == 0
-                                          ? Colors.transparent
-                                          : Colors.white70),
-                                ),
-                              ),
-                            ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ProfileAvatar(
-                          onTap: () => sideMenu.changePage(6),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Obx(
-                    () => CustomTextWidget(
-                      text: controller.currentPage.value == 0
-                          ? 'Admin Panel'
-                          : controller.currentPage.value == 2
-                              ? 'Registrations'
-                              : controller.currentPage.value == 3
-                                  ? 'Users'
-                                  : controller.currentPage.value == 4
-                                      ? 'Subscriptions'
-                                      : controller.currentPage.value == 6
-                                          ? 'Profile'
-                                          : '',
-                      textColor: Colors.white,
-                      fontSize: context.width > 800 ? 20.0 : 18.0,
-                      fontWeight: FontWeight.w600,
-                      maxLines: 2,
-                    ),
-                  ),
-                ],
-              ),
             ),
-    );
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: context.width > 800
+                  ? Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey.shade200,
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          Get.offAll(const LoginScreen());
+                        },
+                        icon: const Icon(Icons.logout_rounded),
+                      ),
+                    )
+                  : ProfileAvatar(
+                      onTap: () => sideMenu.changePage(7),
+                    ),
+            ),
+          ],
+        ));
   }
 }

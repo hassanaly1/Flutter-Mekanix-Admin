@@ -13,9 +13,8 @@ class ActivtiesCount {
   int? unapprovedAccount;
   int? generatorCount;
   int? compressorCount;
-  int? engineAssemblyReportContCount;
-  int? taskCount;
-  int? compressorTaskCount;
+  int? formsCount;
+  int? templatesCount;
 
   ActivtiesCount({
     this.totalUsers,
@@ -25,38 +24,31 @@ class ActivtiesCount {
     this.unapprovedAccount,
     this.generatorCount,
     this.compressorCount,
-    this.engineAssemblyReportContCount,
-    this.taskCount,
-    this.compressorTaskCount,
+    this.formsCount,
+    this.templatesCount,
   });
 
-  factory ActivtiesCount.fromJson(Map<String, dynamic> json) {
-    return ActivtiesCount(
-      totalUsers: json["total_users"],
-      verifiedUsers: json["verified_users"],
-      unverifiedUsers: json["unverified_users"],
-      approvedAccount: json["approved_account"],
-      unapprovedAccount: json["unapproved_account"],
-      generatorCount: json["generator_count"],
-      compressorCount: json["compressor_count"],
-      engineAssemblyReportContCount: json["engine_assembly_report_cont_count"],
-      taskCount: json["task_count"],
-      compressorTaskCount: json["compressor_task_count"],
-    );
-  }
+  factory ActivtiesCount.fromJson(Map<String, dynamic> json) => ActivtiesCount(
+        totalUsers: json["total_users"],
+        verifiedUsers: json["verified_users"],
+        unverifiedUsers: json["unverified_users"],
+        approvedAccount: json["approved_account"],
+        unapprovedAccount: json["unapproved_account"],
+        generatorCount: json["generator_count"],
+        compressorCount: json["compressor_count"],
+        formsCount: json["form"],
+        templatesCount: json["templates"],
+      );
 
-  Map<String, dynamic> toJson() {
-    return {
-      "total_users": totalUsers,
-      "verified_users": verifiedUsers,
-      "unverified_users": unverifiedUsers,
-      "approved_account": approvedAccount,
-      "unapproved_account": unapprovedAccount,
-      "generator_count": generatorCount,
-      "compressor_count": compressorCount,
-      "engine_assembly_report_cont_count": engineAssemblyReportContCount,
-      "task_count": taskCount,
-      "compressor_task_count": compressorTaskCount,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        "total_users": totalUsers,
+        "verified_users": verifiedUsers,
+        "unverified_users": unverifiedUsers,
+        "approved_account": approvedAccount,
+        "unapproved_account": unapprovedAccount,
+        "generator_count": generatorCount,
+        "compressor_count": compressorCount,
+        "form": formsCount,
+        "templates": templatesCount,
+      };
 }

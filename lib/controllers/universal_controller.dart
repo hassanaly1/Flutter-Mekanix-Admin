@@ -16,8 +16,9 @@ class UniversalController extends GetxController {
   AnalyticsData analyticsData = AnalyticsData(
     loginActivity: [],
     accountCreationActivity: [],
-    engineTask: [],
-    compressorTask: [],
+    engineActivity: [],
+    formBuilderActivity: [],
+    templateActivity: [],
   );
 
   var totalUsersCount = 0.obs;
@@ -27,9 +28,8 @@ class UniversalController extends GetxController {
   var unapprovedAccountCount = 0.obs;
   var generatorCount = 0.obs;
   var compressorCount = 0.obs;
-  var engineAssemblyReportContCount = 0.obs;
-  var taskCount = 0.obs;
-  var compressorTaskCount = 0.obs;
+  var formsCount = 0.obs;
+  var templatesCount = 0.obs;
 
   var isLoadingTotalUsers = true.obs;
   var isLoadingVerifiedUsers = true.obs;
@@ -38,9 +38,8 @@ class UniversalController extends GetxController {
   var isLoadingUnapprovedAccount = true.obs;
   var isLoadingGeneratorCount = true.obs;
   var isLoadingCompressorCount = true.obs;
-  var isLoadingEngineAssemblyReportContCount = true.obs;
-  var isLoadingTaskCount = true.obs;
-  var isLoadingCompressorTaskCount = true.obs;
+  var isLoadingFormsCount = true.obs;
+  var isLoadingTemplatesCount = true.obs;
 
   final UsersService usersService = UsersService();
   final AnalyticsService analyticsService = AnalyticsService();
@@ -76,13 +75,11 @@ class UniversalController extends GetxController {
     isLoadingUnapprovedAccount.value = true;
     isLoadingGeneratorCount.value = true;
     isLoadingCompressorCount.value = true;
-    isLoadingEngineAssemblyReportContCount.value = true;
-    isLoadingTaskCount.value = true;
-    isLoadingCompressorTaskCount.value = true;
+    isLoadingFormsCount.value = true;
+    isLoadingTemplatesCount.value = true;
     final result = await analyticsService.getActivitiesCountData(
         token: storage.read('token'));
     if (result['success']) {
-      // Extract the ActivtiesCount object from the result
       ActivtiesCount activitiesCount = result['data'];
 
       // Assign the values to the observable variables
@@ -93,10 +90,8 @@ class UniversalController extends GetxController {
       unapprovedAccountCount.value = activitiesCount.unapprovedAccount ?? 0;
       generatorCount.value = activitiesCount.generatorCount ?? 0;
       compressorCount.value = activitiesCount.compressorCount ?? 0;
-      engineAssemblyReportContCount.value =
-          activitiesCount.engineAssemblyReportContCount ?? 0;
-      taskCount.value = activitiesCount.taskCount ?? 0;
-      compressorTaskCount.value = activitiesCount.compressorTaskCount ?? 0;
+      formsCount.value = activitiesCount.formsCount ?? 0;
+      templatesCount.value = activitiesCount.templatesCount ?? 0;
 
       isLoadingTotalUsers.value = false;
       isLoadingVerifiedUsers.value = false;
@@ -105,11 +100,9 @@ class UniversalController extends GetxController {
       isLoadingUnapprovedAccount.value = false;
       isLoadingGeneratorCount.value = false;
       isLoadingCompressorCount.value = false;
-      isLoadingEngineAssemblyReportContCount.value = false;
-      isLoadingTaskCount.value = false;
-      isLoadingCompressorTaskCount.value = false;
+      isLoadingFormsCount.value = false;
+      isLoadingTemplatesCount.value = false;
     } else {
-      // Handle the error or failure case
       if (result.containsKey('error')) {
         print('Error: ${result['error']}');
       } else {
@@ -122,9 +115,8 @@ class UniversalController extends GetxController {
       isLoadingUnapprovedAccount.value = false;
       isLoadingGeneratorCount.value = false;
       isLoadingCompressorCount.value = false;
-      isLoadingEngineAssemblyReportContCount.value = false;
-      isLoadingTaskCount.value = false;
-      isLoadingCompressorTaskCount.value = false;
+      isLoadingFormsCount.value = false;
+      isLoadingTemplatesCount.value = false;
     }
   }
 
