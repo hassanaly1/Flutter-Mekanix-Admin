@@ -12,10 +12,12 @@ import 'package:mechanix_admin/models/analytics_model.dart';
 import 'package:mechanix_admin/models/user_model.dart';
 
 class UniversalController extends GetxController {
-  // var isLoading = <bool>[].obs;
+  var isApproveLoading = <bool>[].obs;
+  var isRejectLoading = <bool>[].obs;
   var allUsers = <User>[].obs;
   var pendingUsers = <User>[].obs;
   var acceptedUsers = <User>[].obs;
+
   AnalyticsData analyticsData = AnalyticsData(
     loginActivity: [],
     accountCreationActivity: [],
@@ -60,14 +62,12 @@ class UniversalController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    await fetchAllUsers();
-    // getActivitiesAnalyticsData();
+    fetchAllUsers();
+    initializeLoadingStates(pendingUsers.length);
+    getActivitiesAnalyticsData();
     getActivitiesCountData();
     userInfo.value = storage.read('user_info') ?? {};
     userImageURL.value = storage.read('user_info')['profile'];
-    debugPrint('All users: ${allUsers.length}');
-    debugPrint('Pending users: ${pendingUsers.length}');
-    debugPrint('Accepted users: ${acceptedUsers.length}');
   }
 
   updateUserInfo(Map<String, dynamic> userInfo) {
@@ -140,9 +140,10 @@ class UniversalController extends GetxController {
     }
   }
 
-  // void initializeLoadingStates(int count) {
-  //   isLoading.value = List<bool>.filled(count, false);
-  // }
+  void initializeLoadingStates(int count) {
+    isApproveLoading.value = List<bool>.filled(count, false);
+    isRejectLoading.value = List<bool>.filled(count, false);
+  }
 
   Future<void> fetchAllUsers() async {
     final result = await usersService.fetchUsers();
@@ -153,19 +154,24 @@ class UniversalController extends GetxController {
           allUsers.where((user) => user.isAccountApproved == false).toList();
       acceptedUsers.value =
           allUsers.where((user) => user.isAccountApproved == true).toList();
-      // initializeLoadingStates(pendingUsers.length);
-      // initializeLoadingStates(acceptedUsers.length);
+      initializeLoadingStates(pendingUsers.length);
     }
   }
 
   Future<void> approveUser(User user, int index) async {
     debugPrint('ApproveUserFunctionCalled');
+    isApproveLoading[index] = true;
+    update();
 
     try {
       final result = await UsersService().approveUser(user);
+      debugPrint('Server response: $result');
+
       if (result['success']) {
         int userIndex = pendingUsers.indexWhere((u) => u.id == user.id);
         if (userIndex != -1) {
+          MySnackBarsHelper.showMessage(
+              'User ${user.firstName} ${user.lastName} approved successfully.');
           pendingUsers[userIndex] = User(
             id: user.id,
             firstName: user.firstName,
@@ -177,38 +183,65 @@ class UniversalController extends GetxController {
             isAccountApproved: true,
             profile: user.profile,
           );
-          MySnackBarsHelper.showMessage(
-              'User ${user.firstName} ${user.lastName} approved successfully.');
-          acceptedUsers.add(user);
+          acceptedUsers.add(pendingUsers[userIndex]);
           pendingUsers.removeAt(userIndex);
-          update(); // Notify listeners
+          update();
         }
       } else {
         MySnackBarsHelper.showError(
             'Something went wrong while approving the user ${user.firstName} ${user.lastName}.');
       }
     } catch (e) {
+      debugPrint('Error occurred: $e');
       MySnackBarsHelper.showError('Something went wrong, please try again.');
+    } finally {
+      isApproveLoading[index] = false;
+      update();
     }
   }
 
-  Future<void> deleteUser(User user, int index) async {
-    debugPrint('DeleteUserFunctionCalled');
-
+  Future<void> deleteUserInRegistrationScreen(User user, int index) async {
+    isRejectLoading[index] = true;
+    update();
     try {
-      final result =
-          await UsersService().declineUser(user: user, isRejected: false);
-      if (result['success']) {
-        int userIndex = pendingUsers.indexWhere((u) => u.id == user.id);
-        if (userIndex != -1) {
+      final response = await usersService.deleteUser(user.id ?? '');
+
+      if (response['success']) {
+        if (index >= 0 && index < pendingUsers.length) {
+          pendingUsers.removeAt(index);
           MySnackBarsHelper.showMessage(
               'User ${user.firstName} ${user.lastName} removed successfully.');
-          pendingUsers.removeAt(userIndex);
-          update(); // Notify listeners
+        } else {
+          MySnackBarsHelper.showError(
+              'Something went wrong, please try again.');
         }
       } else {
-        MySnackBarsHelper.showError(
-            'Something went wrong while removing the user ${user.firstName} ${user.lastName}.');
+        MySnackBarsHelper.showError('Something went wrong, please try again.');
+      }
+    } catch (e) {
+      MySnackBarsHelper.showError('Something went wrong, please try again.');
+    } finally {
+      isRejectLoading[index] = false;
+      update();
+    }
+  }
+
+  Future<void> deleteUserInUsersScreen(User user, int index) async {
+    try {
+      final response = await usersService.deleteUser(user.id ?? '');
+
+      if (response['success']) {
+        Get.back();
+        if (index >= 0 && index < acceptedUsers.length) {
+          acceptedUsers.removeAt(index);
+          MySnackBarsHelper.showMessage(
+              'User ${user.firstName} ${user.lastName} removed successfully.');
+        } else {
+          MySnackBarsHelper.showError(
+              'Something went wrong, please try again.');
+        }
+      } else {
+        MySnackBarsHelper.showError('Something went wrong, please try again.');
       }
     } catch (e) {
       MySnackBarsHelper.showError('Something went wrong, please try again.');

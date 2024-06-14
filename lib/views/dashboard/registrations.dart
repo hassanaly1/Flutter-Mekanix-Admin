@@ -58,20 +58,34 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             text: 'No Users Requests',
                           ),
                         )
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: controller.pendingUsers.length,
-                          itemBuilder: (context, index) {
-                            final user = controller.pendingUsers[index];
+                      : SingleChildScrollView(
+                          child: Wrap(
+                          spacing: 8.0,
+                          runSpacing: 8.0,
+                          children:
+                              controller.pendingUsers.asMap().entries.map((v) {
+                            final index = v.key;
+                            final user = v.value;
                             return Container(
-                              color: Colors.grey.shade100,
-                              child: CustomUserCard(
-                                user: user,
-                                index: index,
-                              ),
-                            );
-                          },
-                        );
+                                color: Colors.grey.shade100,
+                                child:
+                                    CustomUserCard(index: index, user: user));
+                          }).toList(),
+                        ));
+                  // : ListView.builder(
+                  //     shrinkWrap: true,
+                  //     itemCount: controller.pendingUsers.length,
+                  //     itemBuilder: (context, index) {
+                  //       final user = controller.pendingUsers[index];
+                  //       return Container(
+                  //         color: Colors.grey.shade100,
+                  //         child: CustomUserCard(
+                  //           user: user,
+                  //           index: index,
+                  //         ),
+                  //       );
+                  //     },
+                  //   );
                 }),
               ),
             ],
@@ -127,29 +141,34 @@ class CustomUserCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Flexible(
-                          child: CustomButton(
-                            isLoading: false,
-                            width: 80,
-                            backgroundColor: AppColors.primaryColor,
-                            buttonText: 'Accept',
-                            fontSize: 12,
-                            onTap: () {
-                              controller.approveUser(user, index);
-                            },
-                          ),
+                          child: Obx(() {
+                            return CustomButton(
+                              isLoading: controller.isApproveLoading[index],
+                              width: 80,
+                              backgroundColor: AppColors.primaryColor,
+                              buttonText: 'Accept',
+                              fontSize: 12,
+                              onTap: () {
+                                controller.approveUser(user, index);
+                              },
+                            );
+                          }),
                         ),
                         Flexible(
-                          child: CustomButton(
-                            isLoading: false,
-                            backgroundColor: AppColors.secondaryColor,
-                            textColor: AppColors.whiteTextColor,
-                            width: context.width > 350 ? 100 : 70,
-                            buttonText: 'Reject',
-                            fontSize: 12,
-                            onTap: () {
-                              controller.deleteUser(user, index);
-                            },
-                          ),
+                          child: Obx(() {
+                            return CustomButton(
+                              isLoading: controller.isRejectLoading[index],
+                              backgroundColor: AppColors.secondaryColor,
+                              textColor: AppColors.whiteTextColor,
+                              width: context.width > 350 ? 100 : 70,
+                              buttonText: 'Reject',
+                              fontSize: 12,
+                              onTap: () {
+                                controller.deleteUserInRegistrationScreen(
+                                    user, index);
+                              },
+                            );
+                          }),
                         ),
                       ],
                     ),

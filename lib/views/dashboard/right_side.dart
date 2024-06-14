@@ -26,6 +26,7 @@ class RightSideWidget extends StatelessWidget {
         controller: tabController,
         children: [
           HomeSection(sideMenu: sideMenu),
+
           const SizedBox.shrink(), //Drawer
           RegistrationScreen(sideMenu: sideMenu),
           UserScreen(sideMenu: sideMenu),
