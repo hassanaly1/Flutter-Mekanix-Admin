@@ -21,6 +21,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   final DashboardController _controller = Get.put(DashboardController());
   final UniversalController _universalController =
       Get.put(UniversalController());
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -42,10 +43,22 @@ class _DashboardScreenState extends State<DashboardScreen>
           children: [
             Image.asset('assets/images/home-bg.png', fit: BoxFit.fill),
             Scaffold(
+              key: _scaffoldKey,
               backgroundColor: Colors.transparent,
+              drawer: !context.isLandscape
+                  ? Drawer(
+                      child: SideMenuCard(
+                        sideMenu: _controller.sideMenu,
+                        scaffoldKey: _scaffoldKey,
+                      ),
+                    )
+                  : null,
               body: Column(
                 children: [
-                  HomeAppbar(sideMenu: _controller.sideMenu),
+                  HomeAppbar(
+                    sideMenu: _controller.sideMenu,
+                    scaffoldKey: _scaffoldKey,
+                  ),
                   Expanded(
                     child: Container(
                       decoration: const BoxDecoration(
@@ -78,10 +91,11 @@ class _DashboardScreenState extends State<DashboardScreen>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Visibility(
-                            visible: context.width > 800,
-                            child: SideMenuCard(sideMenu: _controller.sideMenu),
-                          ),
+                          if (context.isLandscape)
+                            SideMenuCard(
+                              sideMenu: _controller.sideMenu,
+                              scaffoldKey: _scaffoldKey,
+                            ),
                           RightSideWidget(
                             pageController: _controller.pageController,
                             sideMenu: _controller.sideMenu,
@@ -103,32 +117,42 @@ class _DashboardScreenState extends State<DashboardScreen>
 
 class HomeAppbar extends StatelessWidget {
   final SideMenuController sideMenu;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
   HomeAppbar({
     super.key,
     required this.sideMenu,
+    required this.scaffoldKey,
   });
 
   final DashboardController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    // var currentPage = sideMenu.currentPage;
-
     return SizedBox(
-        height:
-            context.width > 800 ? context.height * 0.15 : context.height * 0.15,
+        height: context.height * 0.15,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Image.asset(
-                  'assets/images/app-logo-white.png',
-                  height: context.height * 0.1,
-                  fit: BoxFit.cover,
-                ),
+                context.isLandscape
+                    ? Image.asset(
+                        'assets/images/app-logo-white.png',
+                        height: context.height * 0.08,
+                        fit: BoxFit.cover,
+                      )
+                    : IconButton(
+                        onPressed: () {
+                          scaffoldKey.currentState?.openDrawer();
+                        },
+                        icon: const Icon(
+                          Icons.menu_open_rounded,
+                          size: 30.0,
+                          color: Colors.white70,
+                        ),
+                      ),
                 Obx(
                   () => CustomTextWidget(
                     text: controller.currentPage.value == 0
@@ -139,7 +163,7 @@ class HomeAppbar extends StatelessWidget {
                                 ? 'Users'
                                 : controller.currentPage.value == 4
                                     ? 'Subscriptions'
-                                    : controller.currentPage.value == 6
+                                    : controller.currentPage.value == 5
                                         ? 'Profile'
                                         : '',
                     textColor: Colors.white,
@@ -165,9 +189,9 @@ class HomeAppbar extends StatelessWidget {
                         icon: const Icon(Icons.logout_rounded),
                       ),
                     )
-                  : ProfileAvatar(
-                      onTap: () => sideMenu.changePage(7),
-                    ),
+                  : InkWell(
+                      onTap: () => sideMenu.changePage(5),
+                      child: const ProfileAvatar()),
             ),
           ],
         ));

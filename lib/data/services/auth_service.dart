@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:mechanix_admin/controllers/universal_controller.dart';
 import 'package:mechanix_admin/data/api_endpoints.dart';
+import 'package:mechanix_admin/helpers/storage_helper.dart';
 
 final GetStorage _storage = GetStorage();
 
@@ -190,8 +194,7 @@ class AuthService {
 
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse(
-          'https://mechanix-api-production.up.railway.app/api/auth/editprofile'),
+      Uri.parse('${ApiEndPoints.baseUrl}${ApiEndPoints.updateProfileUrl}'),
     );
 
     request.fields.addAll({
@@ -220,8 +223,8 @@ class AuthService {
           Map<String, dynamic> jsonResponse = json.decode(responseString);
           if (jsonResponse['status'] == 'success') {
             Map<String, dynamic> userData = jsonResponse['data'][0]['user'];
-            _storage.write('user_info', userData);
-            // Get.find<UniversalController>().updateUserInfo(userData);
+            storage.write('user_info', userData);
+            Get.find<UniversalController>().updateUserInfo(userData);
             isSuccess = true;
             debugPrint('Profile updated successfully');
           } else {
@@ -262,7 +265,7 @@ class AuthService {
     var request = http.MultipartRequest(
       'POST',
       Uri.parse(
-          'https://mechanix-api-production.up.railway.app/api/auth/editprofilefile'),
+          '${ApiEndPoints.baseUrl}${ApiEndPoints.updateProfilePictureUrl}'),
     );
     request.files.add(
       http.MultipartFile.fromBytes(
@@ -282,8 +285,8 @@ class AuthService {
           Map<String, dynamic> jsonResponse = json.decode(responseString);
           if (jsonResponse['status'] == 'success') {
             userData = jsonResponse['data'][0]['user'];
-            _storage.write('user_info', userData);
-            // Get.find<UniversalController>().updateUserInfo(userData!);
+            storage.write('user_info', userData);
+            Get.find<UniversalController>().updateUserInfo(userData!);
             isSuccess = true;
             debugPrint('Profile updated successfully');
           } else {

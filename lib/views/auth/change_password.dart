@@ -139,10 +139,10 @@ class ChangePasswordScreen extends StatelessWidget {
                                           controller
                                               .confirmPasswordController.text
                                               .trim()) {
-                                        // ToastMessage.showToastMessage(
-                                        //     message:
-                                        //         'Password and Confirm Password should be same',
-                                        //     backgroundColor: Colors.red);
+                                        ToastMessage.showToastMessage(
+                                            message:
+                                                'Password and Confirm Password should be same',
+                                            backgroundColor: Colors.red);
                                       } else {
                                         controller.changePassword();
                                       }

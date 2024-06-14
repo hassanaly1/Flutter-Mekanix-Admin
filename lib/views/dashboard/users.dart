@@ -112,11 +112,13 @@ class AcceptedUserCard extends StatelessWidget {
                 icon: const Icon(FontAwesomeIcons.xmark, color: Colors.red)),
           ],
         ),
-        leading: CircleAvatar(
-            backgroundImage: user.profile == null
-                ? const AssetImage('assets/images/placeholder-image.png')
-                    as ImageProvider
-                : NetworkImage(user.profile ?? '')),
+        leading: const CircleAvatar(
+            // user.profile == null
+            //     ?
+            backgroundImage: AssetImage('assets/images/placeholder-image.png')
+                as ImageProvider
+            // : NetworkImage(user.profile ?? ''),
+            ),
         title: CustomTextWidget(
           text: '${user.firstName} ${user.lastName}',
           fontSize: 14.0,
@@ -232,28 +234,27 @@ class AcceptedUserCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Obx(
-                          () => CustomButton(
-                            isLoading: controller.isLoading[index],
-                            backgroundColor:
-                                isUpdate ? AppColors.primaryColor : Colors.red,
-                            textColor: AppColors.textColor,
-                            buttonText: isUpdate ? 'Update' : 'Remove',
-                            fontSize: 12.0,
-                            onTap: () {
-                              if (isUpdate) {
-                                controller.acceptedUsers[index].firstName =
-                                    nameController.text.trim();
-                                controller.acceptedUsers[index].email =
-                                    emailController.text.trim();
-                                controller.acceptedUsers.refresh();
-                                Get.back();
-                              } else if (user != null) {
-                                controller.deleteUser(user, index);
-                                Get.back();
-                              }
-                            },
-                          ),
+                        CustomButton(
+                          isLoading: false,
+                          // isLoading: controller.isLoading[index],
+                          backgroundColor:
+                              isUpdate ? AppColors.primaryColor : Colors.red,
+                          textColor: AppColors.textColor,
+                          buttonText: isUpdate ? 'Update' : 'Remove',
+                          fontSize: 12.0,
+                          onTap: () {
+                            if (isUpdate) {
+                              controller.acceptedUsers[index].firstName =
+                                  nameController.text.trim();
+                              controller.acceptedUsers[index].email =
+                                  emailController.text.trim();
+                              controller.acceptedUsers.refresh();
+                              Get.back();
+                            } else if (user != null) {
+                              controller.deleteUser(user, index);
+                              Get.back();
+                            }
+                          },
                         ),
                         CustomButton(
                           isLoading: false,

@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mechanix_admin/data/services/analytics_service.dart';
 import 'package:mechanix_admin/data/services/users_service.dart';
 import 'package:mechanix_admin/helpers/snackbar.dart';
@@ -9,7 +12,7 @@ import 'package:mechanix_admin/models/analytics_model.dart';
 import 'package:mechanix_admin/models/user_model.dart';
 
 class UniversalController extends GetxController {
-  var isLoading = <bool>[].obs;
+  // var isLoading = <bool>[].obs;
   var allUsers = <User>[].obs;
   var pendingUsers = <User>[].obs;
   var acceptedUsers = <User>[].obs;
@@ -44,15 +47,32 @@ class UniversalController extends GetxController {
   final UsersService usersService = UsersService();
   final AnalyticsService analyticsService = AnalyticsService();
 
+  XFile? userImage;
+  RxString userImageURL = ''.obs;
+  Uint8List? userImageInBytes;
+  RxMap userInfo = {}.obs;
+
+  set setUserImageUrl(String value) {
+    userImageURL.value = value;
+    update();
+  }
+
   @override
   void onInit() async {
     super.onInit();
-    // await fetchAllUsers();
+    await fetchAllUsers();
     // getActivitiesAnalyticsData();
     getActivitiesCountData();
-    // debugPrint('All users: $allUsers');
-    // debugPrint('Pending users: $pendingUsers');
-    // debugPrint('Accepted users: $acceptedUsers');
+    userInfo.value = storage.read('user_info') ?? {};
+    userImageURL.value = storage.read('user_info')['profile'];
+    debugPrint('All users: ${allUsers.length}');
+    debugPrint('Pending users: ${pendingUsers.length}');
+    debugPrint('Accepted users: ${acceptedUsers.length}');
+  }
+
+  updateUserInfo(Map<String, dynamic> userInfo) {
+    this.userInfo.value = userInfo;
+    storage.write('user_info', userInfo);
   }
 
   Future<void> getActivitiesAnalyticsData() async {
@@ -120,9 +140,9 @@ class UniversalController extends GetxController {
     }
   }
 
-  void initializeLoadingStates(int count) {
-    isLoading.value = List<bool>.filled(count, false);
-  }
+  // void initializeLoadingStates(int count) {
+  //   isLoading.value = List<bool>.filled(count, false);
+  // }
 
   Future<void> fetchAllUsers() async {
     final result = await usersService.fetchUsers();
@@ -133,8 +153,8 @@ class UniversalController extends GetxController {
           allUsers.where((user) => user.isAccountApproved == false).toList();
       acceptedUsers.value =
           allUsers.where((user) => user.isAccountApproved == true).toList();
-      initializeLoadingStates(pendingUsers.length);
-      initializeLoadingStates(acceptedUsers.length);
+      // initializeLoadingStates(pendingUsers.length);
+      // initializeLoadingStates(acceptedUsers.length);
     }
   }
 
@@ -142,12 +162,11 @@ class UniversalController extends GetxController {
     debugPrint('ApproveUserFunctionCalled');
 
     try {
-      isLoading[index] = true;
-      final result = await usersService.approveUser(user);
+      final result = await UsersService().approveUser(user);
       if (result['success']) {
-        int index = pendingUsers.indexWhere((u) => u.id == user.id);
-        if (index != -1) {
-          pendingUsers[index] = User(
+        int userIndex = pendingUsers.indexWhere((u) => u.id == user.id);
+        if (userIndex != -1) {
+          pendingUsers[userIndex] = User(
             id: user.id,
             firstName: user.firstName,
             lastName: user.lastName,
@@ -156,13 +175,13 @@ class UniversalController extends GetxController {
             isAdmin: user.isAdmin,
             isOnline: user.isOnline,
             isAccountApproved: true,
-            // Mark the user as approved
             profile: user.profile,
           );
           MySnackBarsHelper.showMessage(
               'User ${user.firstName} ${user.lastName} approved successfully.');
           acceptedUsers.add(user);
-          pendingUsers.removeAt(index);
+          pendingUsers.removeAt(userIndex);
+          update(); // Notify listeners
         }
       } else {
         MySnackBarsHelper.showError(
@@ -170,8 +189,6 @@ class UniversalController extends GetxController {
       }
     } catch (e) {
       MySnackBarsHelper.showError('Something went wrong, please try again.');
-    } finally {
-      isLoading[index] = false;
     }
   }
 
@@ -179,27 +196,15 @@ class UniversalController extends GetxController {
     debugPrint('DeleteUserFunctionCalled');
 
     try {
-      isLoading[index] = true;
       final result =
-          await usersService.declineUser(user: user, isRejected: false);
+          await UsersService().declineUser(user: user, isRejected: false);
       if (result['success']) {
-        int index = acceptedUsers.indexWhere((u) => u.id == user.id);
-        if (index != -1) {
-          // acceptedUsers[index] = User(
-          //   id: user.id,
-          //   firstName: user.firstName,
-          //   lastName: user.lastName,
-          //   email: user.email,
-          //   isEmailVerified: user.isEmailVerified,
-          //   isAdmin: user.isAdmin,
-          //   isOnline: user.isOnline,
-          //   isAccountApproved: true,
-          //   profile: user.profile,
-          // );
+        int userIndex = pendingUsers.indexWhere((u) => u.id == user.id);
+        if (userIndex != -1) {
           MySnackBarsHelper.showMessage(
               'User ${user.firstName} ${user.lastName} removed successfully.');
-          acceptedUsers.removeAt(index);
-          Get.back();
+          pendingUsers.removeAt(userIndex);
+          update(); // Notify listeners
         }
       } else {
         MySnackBarsHelper.showError(
@@ -207,8 +212,6 @@ class UniversalController extends GetxController {
       }
     } catch (e) {
       MySnackBarsHelper.showError('Something went wrong, please try again.');
-    } finally {
-      isLoading[index] = false;
     }
   }
 }

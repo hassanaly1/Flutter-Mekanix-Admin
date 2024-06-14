@@ -6,6 +6,7 @@ import 'package:mechanix_admin/controllers/auth_controllers.dart';
 import 'package:mechanix_admin/helpers/appcolors.dart';
 import 'package:mechanix_admin/helpers/custom_button.dart';
 import 'package:mechanix_admin/helpers/custom_text.dart';
+import 'package:mechanix_admin/helpers/toast.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -229,9 +230,9 @@ class _OtpScreenState extends State<OtpScreen> {
                                   onTap: () {
                                     if (_controller
                                         .otpController.text.isEmpty) {
-                                      // ToastMessage.showToastMessage(
-                                      //     message: 'Please Enter OTP',
-                                      //     backgroundColor: Colors.red);
+                                      ToastMessage.showToastMessage(
+                                          message: 'Please Enter OTP',
+                                          backgroundColor: Colors.red);
                                     } else {
                                       _controller.verifyOtp(
                                           verifyOtpForForgetPassword: widget

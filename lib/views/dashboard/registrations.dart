@@ -28,46 +28,56 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         widget.sideMenu.changePage(0);
       },
       child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-              color: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: context.width * 0.04),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                        width: double.infinity,
-                        child: ReUsableContainer(
-                            color: AppColors.primaryColor,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0, vertical: 8.0),
-                            child: CustomTextWidget(
-                                text: 'New Registrations Requests',
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w600,
-                                textAlign: TextAlign.center))),
-                    Obx(() => controller.pendingUsers.isEmpty
-                        ? Center(
-                            child: CustomTextWidget(text: 'No Users Requests'))
-                        : Expanded(
-                            child: SingleChildScrollView(
-                                child: Wrap(
-                            spacing: 8.0,
-                            runSpacing: 8.0,
-                            children: controller.pendingUsers
-                                .asMap()
-                                .entries
-                                .map((v) {
-                              final index = v.key;
-                              final user = v.value;
-                              return Container(
-                                  color: Colors.grey.shade100,
-                                  child:
-                                      CustomUserCard(index: index, user: user));
-                            }).toList(),
-                          ))))
-                  ]))),
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+          color: Colors.transparent,
+          padding: EdgeInsets.symmetric(horizontal: context.width * 0.04),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: ReUsableContainer(
+                  color: AppColors.primaryColor,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 8.0),
+                  child: CustomTextWidget(
+                    text: 'New Registrations Requests',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Obx(() {
+                  return controller.pendingUsers.isEmpty
+                      ? Center(
+                          child: CustomTextWidget(
+                            text: 'No Users Requests',
+                          ),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: controller.pendingUsers.length,
+                          itemBuilder: (context, index) {
+                            final user = controller.pendingUsers[index];
+                            return Container(
+                              color: Colors.grey.shade100,
+                              child: CustomUserCard(
+                                user: user,
+                                index: index,
+                              ),
+                            );
+                          },
+                        );
+                }),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -96,8 +106,9 @@ class CustomUserCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 height: context.width > 270 ? 150 : 170,
                 decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(20.0)),
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -112,76 +123,49 @@ class CustomUserCard extends StatelessWidget {
                       fontWeight: FontWeight.w400,
                       textColor: AppColors.lightTextColor,
                     ),
-                    context.width > 270
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Obx(
-                                () => CustomButton(
-                                  isLoading: controller.isLoading[index],
-                                  width: context.width > 350 ? 100 : 70,
-                                  backgroundColor: AppColors.primaryColor,
-                                  buttonText: 'Accept',
-                                  fontSize: context.width > 350 ? 14 : 10,
-                                  onTap: () {
-                                    controller.approveUser(user, index);
-                                  },
-                                ),
-                              ),
-                              CustomButton(
-                                isLoading: false,
-                                backgroundColor: AppColors.secondaryColor,
-                                textColor: AppColors.whiteTextColor,
-                                width: context.width > 350 ? 100 : 70,
-                                buttonText: 'Reject',
-                                fontSize: context.width > 350 ? 14 : 10,
-                                onTap: () =>
-                                    controller.pendingUsers.removeAt(index),
-                              )
-                            ],
-                          )
-                        : Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Obx(
-                                () => CustomButton(
-                                  isLoading: controller.isLoading[index],
-                                  width: context.width > 350 ? 100 : 70,
-                                  backgroundColor: AppColors.primaryColor,
-                                  buttonText: 'Accept',
-                                  fontSize: context.width > 350 ? 14 : 10,
-                                  onTap: () {
-                                    controller.approveUser(user, index);
-                                  },
-                                ),
-                              ),
-                              CustomButton(
-                                isLoading: false,
-                                backgroundColor: AppColors.secondaryColor,
-                                textColor: Colors.white70,
-                                width: context.width > 350 ? 100 : 70,
-                                buttonText: 'Reject',
-                                fontSize: context.width > 350 ? 14 : 10,
-                                onTap: () =>
-                                    controller.pendingUsers.removeAt(index),
-                              )
-                            ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: CustomButton(
+                            isLoading: false,
+                            width: 80,
+                            backgroundColor: AppColors.primaryColor,
+                            buttonText: 'Accept',
+                            fontSize: 12,
+                            onTap: () {
+                              controller.approveUser(user, index);
+                            },
                           ),
+                        ),
+                        Flexible(
+                          child: CustomButton(
+                            isLoading: false,
+                            backgroundColor: AppColors.secondaryColor,
+                            textColor: AppColors.whiteTextColor,
+                            width: context.width > 350 ? 100 : 70,
+                            buttonText: 'Reject',
+                            fontSize: 12,
+                            onTap: () {
+                              controller.deleteUser(user, index);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
             ),
-            Positioned(
+            const Positioned(
               right: 0,
               left: 0,
               top: 0,
-              child: Container(
-                height: 80,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: NetworkImage(user.profile ?? ''),
-                    )),
+              child: CircleAvatar(
+                radius: 40,
+                backgroundImage:
+                    AssetImage('assets/images/placeholder-image.png')
+                        as ImageProvider,
               ),
             ),
           ],

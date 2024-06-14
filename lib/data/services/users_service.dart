@@ -22,6 +22,7 @@ class UsersService extends GetxController {
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
         final List<dynamic> usersJson = responseData["data"][0]["users"];
+        print('TotalUsers: ${usersJson.length}');
         final List<User> users =
             usersJson.map((json) => User.fromJson(json)).toList();
         return {'success': true, 'users': users};

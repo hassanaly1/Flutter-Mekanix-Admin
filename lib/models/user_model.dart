@@ -32,26 +32,26 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["_id"],
-    firstName: json["first_name"],
-    lastName: json["last_name"],
-    email: json["email"],
-    isEmailVerified: json["is_email_verified"],
-    isAdmin: json["is_admin"],
-    isOnline: json["is_online"],
-    isAccountApproved: json["is_account_approved"],
-    profile: json["profile"],
-  );
+        id: json["_id"],
+        firstName: json["first_name"],
+        lastName: json["last_name"],
+        email: json["email"],
+        isEmailVerified: json["is_email_verified"],
+        isAdmin: json["is_admin"],
+        isOnline: json["is_online"],
+        isAccountApproved: json["is_account_approved"],
+        profile: json["profile"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
-    "first_name": firstName,
-    "last_name": lastName,
-    "email": email,
-    "is_email_verified": isEmailVerified,
-    "is_admin": isAdmin,
-    "is_online": isOnline,
-    "is_account_approved": isAccountApproved,
-    "profile": profile,
-  };
+        "_id": id,
+        "first_name": firstName,
+        "last_name": lastName,
+        "email": email,
+        "is_email_verified": isEmailVerified,
+        "is_admin": isAdmin,
+        "is_online": isOnline,
+        "is_account_approved": isAccountApproved,
+        "profile": profile,
+      };
 }

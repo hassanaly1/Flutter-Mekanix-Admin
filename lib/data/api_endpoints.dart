@@ -9,6 +9,7 @@ class ApiEndPoints {
   static String verifyOtpUrl = '/api/auth/verify-reset-otp';
   static String changePasswordUrl = '/api/auth/changepassword';
   static String updateProfileUrl = '/api/auth/editprofile';
+  static String updateProfilePictureUrl = '/api/auth/editprofilefile';
 
   //UsersManagement
   static String getAllUsersUrl = '/api/user/getallusers';

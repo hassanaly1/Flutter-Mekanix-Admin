@@ -1,19 +1,20 @@
 import 'package:easy_sidemenu/easy_sidemenu.dart';
-import 'package:mechanix_admin/helpers/appcolors.dart';
-import 'package:mechanix_admin/helpers/custom_text.dart';
-import 'package:mechanix_admin/helpers/reusable_container.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:mechanix_admin/helpers/appcolors.dart';
+import 'package:mechanix_admin/helpers/custom_text.dart';
+import 'package:mechanix_admin/helpers/reusable_container.dart';
 
 class SideMenuCard extends StatelessWidget {
   const SideMenuCard({
     super.key,
     required this.sideMenu,
+    required this.scaffoldKey,
   });
 
   final SideMenuController sideMenu;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +71,7 @@ class SideMenuCard extends StatelessWidget {
                 title: 'Home',
                 onTap: (index, _) {
                   sideMenu.changePage(index);
+                  scaffoldKey.currentState?.closeDrawer();
                 },
                 icon: const Icon(CupertinoIcons.home)),
             SideMenuItem(
@@ -81,28 +83,15 @@ class SideMenuCard extends StatelessWidget {
               title: 'Registration',
               onTap: (index, _) {
                 sideMenu.changePage(index);
+                scaffoldKey.currentState?.closeDrawer();
               },
               icon: const Icon(Symbols.lab_profile),
-              trailing: Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.amber,
-                        borderRadius: BorderRadius.all(Radius.circular(6))),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 6.0, vertical: 3),
-                      child: Text(
-                        'New',
-                        style: TextStyle(fontSize: 11, color: Colors.grey[800]),
-                      ),
-                    )),
-              ),
             ),
             SideMenuItem(
               title: 'Users',
               onTap: (index, _) {
                 sideMenu.changePage(index);
+                scaffoldKey.currentState?.closeDrawer();
               },
               icon: const Icon(Symbols.dashboard_customize),
             ),
@@ -122,6 +111,7 @@ class SideMenuCard extends StatelessWidget {
               title: 'Profile',
               onTap: (index, _) {
                 sideMenu.changePage(index);
+                scaffoldKey.currentState?.closeDrawer();
               },
               icon: const Icon(Symbols.manufacturing),
             ),
