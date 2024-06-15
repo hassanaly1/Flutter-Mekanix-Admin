@@ -49,6 +49,7 @@ dependencies:
   pinput: ^4.0.0
   fluttertoast: ^8.2.6
   image_picker: ^1.1.2
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -111,3 +112,22 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: "AppIcon"
+  image_path: "assets/images/app-logo.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "assets/images/app-logo.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/images/app-logo.png"
+    icon_size: 48
+    min: 240
+    max: 480
+    background_color: "#hexcode"

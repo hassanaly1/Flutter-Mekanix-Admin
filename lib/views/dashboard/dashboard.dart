@@ -5,6 +5,7 @@ import 'package:mechanix_admin/controllers/dashboard_controller.dart';
 import 'package:mechanix_admin/controllers/universal_controller.dart';
 import 'package:mechanix_admin/helpers/custom_text.dart';
 import 'package:mechanix_admin/helpers/profile_avatar.dart';
+import 'package:mechanix_admin/helpers/storage_helper.dart';
 import 'package:mechanix_admin/views/auth/login.dart';
 import 'package:mechanix_admin/views/dashboard/right_side.dart';
 import 'package:mechanix_admin/views/dashboard/side_menu.dart';
@@ -176,7 +177,7 @@ class HomeAppbar extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: context.width > 800
+              child: context.isLandscape
                   ? Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
@@ -184,7 +185,11 @@ class HomeAppbar extends StatelessWidget {
                       ),
                       child: IconButton(
                         onPressed: () {
-                          Get.offAll(const LoginScreen());
+                          storage.remove('token');
+                          storage.remove('user_info');
+                          Get.delete<UniversalController>();
+                          Get.delete<DashboardController>();
+                          Get.offAll(() => const LoginScreen());
                         },
                         icon: const Icon(Icons.logout_rounded),
                       ),

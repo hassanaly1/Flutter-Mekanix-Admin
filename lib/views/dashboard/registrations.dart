@@ -127,13 +127,13 @@ class CustomUserCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     CustomTextWidget(
-                      text: user.firstName ?? '',
+                      text: '${user.firstName} ${user.lastName}',
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
                     ),
                     CustomTextWidget(
                       text: user.email ?? '',
-                      fontSize: 12.0,
+                      fontSize: 10.0,
                       fontWeight: FontWeight.w400,
                       textColor: AppColors.lightTextColor,
                     ),
