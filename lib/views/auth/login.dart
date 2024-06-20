@@ -88,10 +88,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              SizedBox(height: context.height * 0.1),
                               CustomTextWidget(
-                                text: 'Login into your Account',
+                                text: 'Login to your Account',
                                 fontSize: 16.0,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                               ),
                               CustomTextWidget(
                                 text: 'Please enter your Email & Password.',

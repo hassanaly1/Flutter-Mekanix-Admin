@@ -150,7 +150,7 @@ class HomeAppbar extends StatelessWidget {
                         },
                         icon: const Icon(
                           Icons.menu_open_rounded,
-                          size: 30.0,
+                          size: 26.0,
                           color: Colors.white70,
                         ),
                       ),

@@ -7,7 +7,6 @@ import 'package:mechanix_admin/helpers/appcolors.dart';
 import 'package:mechanix_admin/helpers/custom_button.dart';
 import 'package:mechanix_admin/helpers/custom_text.dart';
 import 'package:mechanix_admin/helpers/reusable_container.dart';
-import 'package:mechanix_admin/helpers/reusable_textfield.dart';
 import 'package:mechanix_admin/helpers/snackbar.dart';
 import 'package:mechanix_admin/models/user_model.dart';
 
@@ -145,7 +144,7 @@ class AcceptedUserCard extends StatelessWidget {
               scrollable: true,
               backgroundColor: Colors.transparent,
               content: Container(
-                width: 300,
+                width: 400,
                 padding: EdgeInsets.symmetric(
                     horizontal: 20.0, vertical: context.height * 0.04),
                 decoration: const BoxDecoration(
@@ -200,7 +199,6 @@ class AcceptedUserCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Obx(() => CustomButton(
-                              width: 100,
                               isLoading: isLoading.value,
                               backgroundColor: Colors.red,
                               textColor: AppColors.whiteTextColor,
@@ -223,7 +221,6 @@ class AcceptedUserCard extends StatelessWidget {
                             )),
                         const SizedBox(width: 8.0),
                         CustomButton(
-                          width: 100,
                           isLoading: false,
                           backgroundColor: AppColors.secondaryColor,
                           textColor: AppColors.whiteTextColor,
@@ -244,115 +241,115 @@ class AcceptedUserCard extends StatelessWidget {
   }
 
 // void openUserDialog({
-  //   required BuildContext context,
-  //   required int index,
-  //   required UniversalController controller,
-  //   User? user,
-  // }) {
-  //   var isLoading = false.obs;
-  //
-  //   showGeneralDialog(
-  //     context: context,
-  //     barrierDismissible: true,
-  //     barrierLabel: 'Dismiss',
-  //     transitionDuration: const Duration(milliseconds: 400),
-  //     pageBuilder: (context, animation, secondaryAnimation) => Container(),
-  //     transitionBuilder: (context, animation, secondaryAnimation, child) {
-  //       return ScaleTransition(
-  //         scale: Tween<double>(begin: 0.5, end: 1.0).animate(animation),
-  //         child: FadeTransition(
-  //           opacity: Tween<double>(begin: 0.5, end: 1.0).animate(animation),
-  //           child: Obx(() {
-  //             return AlertDialog(
-  //               scrollable: true,
-  //               backgroundColor: Colors.transparent,
-  //               content: Container(
-  //                 width: double.infinity,
-  //                 padding: EdgeInsets.symmetric(
-  //                     horizontal: 8.0, vertical: context.height * 0.02),
-  //                 decoration: const BoxDecoration(
-  //                   gradient: LinearGradient(
-  //                     begin: Alignment.centerLeft,
-  //                     end: Alignment.centerRight,
-  //                     colors: [
-  //                       Color.fromRGBO(255, 220, 105, 0.4),
-  //                       Color.fromRGBO(86, 127, 255, 0.4),
-  //                     ],
-  //                   ),
-  //                   borderRadius: BorderRadius.all(Radius.circular(12.0)),
-  //                   boxShadow: [
-  //                     BoxShadow(
-  //                         color: Colors.black26,
-  //                         blurRadius: 5.0,
-  //                         spreadRadius: 5.0),
-  //                     BoxShadow(
-  //                         color: Colors.white,
-  //                         offset: Offset(0.0, 0.0),
-  //                         blurRadius: 0.0,
-  //                         spreadRadius: 0.0)
-  //                   ],
-  //                 ),
-  //                 child: Column(
-  //                   children: [
-  //                     CustomTextWidget(
-  //                       text: 'Remove User',
-  //                       textColor: AppColors.textColor,
-  //                       fontWeight: FontWeight.w400,
-  //                     ),
-  //                     const SizedBox(height: 12.0),
-  //                     CustomTextWidget(
-  //                       text:
-  //                           'This action will permanently remove ${user?.firstName} ${user?.lastName} and their data. This cannot be undone.',
-  //                       maxLines: 2,
-  //                       fontSize: 12.0,
-  //                       textAlign: TextAlign.center,
-  //                       textColor: AppColors.textColor,
-  //                     ),
-  //                     CustomTextWidget(
-  //                       text: 'Are you sure you want to proceed?',
-  //                       maxLines: 2,
-  //                       fontWeight: FontWeight.w400,
-  //                       textAlign: TextAlign.center,
-  //                       textColor: AppColors.textColor,
-  //                     ),
-  //                     Row(
-  //                       mainAxisAlignment: MainAxisAlignment.center,
-  //                       children: [
-  //                         CustomButton(
-  //                           isLoading: isLoading.value,
-  //                           backgroundColor: Colors.red,
-  //                           textColor: AppColors.textColor,
-  //                           buttonText: 'Remove',
-  //                           fontSize: 12.0,
-  //                           onTap: () async {
-  //                             if (user != null) {
-  //                               isLoading.value = true;
-  //                               await controller
-  //                                   .deleteUserInUsersScreen(user, index)
-  //                                   .then((value) => Get.back());
-  //                               isLoading.value = false;
-  //                               Get.back();
-  //                             }
-  //                           },
-  //                         ),
-  //                         CustomButton(
-  //                           isLoading: false,
-  //                           backgroundColor: AppColors.secondaryColor,
-  //                           textColor: AppColors.whiteTextColor,
-  //                           buttonText: 'Cancel',
-  //                           fontSize: 12.0,
-  //                           onTap: () => Get.back(),
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             );
-  //           }),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+//   required BuildContext context,
+//   required int index,
+//   required UniversalController controller,
+//   User? user,
+// }) {
+//   var isLoading = false.obs;
+//
+//   showGeneralDialog(
+//     context: context,
+//     barrierDismissible: true,
+//     barrierLabel: 'Dismiss',
+//     transitionDuration: const Duration(milliseconds: 400),
+//     pageBuilder: (context, animation, secondaryAnimation) => Container(),
+//     transitionBuilder: (context, animation, secondaryAnimation, child) {
+//       return ScaleTransition(
+//         scale: Tween<double>(begin: 0.5, end: 1.0).animate(animation),
+//         child: FadeTransition(
+//           opacity: Tween<double>(begin: 0.5, end: 1.0).animate(animation),
+//           child: Obx(() {
+//             return AlertDialog(
+//               scrollable: true,
+//               backgroundColor: Colors.transparent,
+//               content: Container(
+//                 width: double.infinity,
+//                 padding: EdgeInsets.symmetric(
+//                     horizontal: 8.0, vertical: context.height * 0.02),
+//                 decoration: const BoxDecoration(
+//                   gradient: LinearGradient(
+//                     begin: Alignment.centerLeft,
+//                     end: Alignment.centerRight,
+//                     colors: [
+//                       Color.fromRGBO(255, 220, 105, 0.4),
+//                       Color.fromRGBO(86, 127, 255, 0.4),
+//                     ],
+//                   ),
+//                   borderRadius: BorderRadius.all(Radius.circular(12.0)),
+//                   boxShadow: [
+//                     BoxShadow(
+//                         color: Colors.black26,
+//                         blurRadius: 5.0,
+//                         spreadRadius: 5.0),
+//                     BoxShadow(
+//                         color: Colors.white,
+//                         offset: Offset(0.0, 0.0),
+//                         blurRadius: 0.0,
+//                         spreadRadius: 0.0)
+//                   ],
+//                 ),
+//                 child: Column(
+//                   children: [
+//                     CustomTextWidget(
+//                       text: 'Remove User',
+//                       textColor: AppColors.textColor,
+//                       fontWeight: FontWeight.w400,
+//                     ),
+//                     const SizedBox(height: 12.0),
+//                     CustomTextWidget(
+//                       text:
+//                           'This action will permanently remove ${user?.firstName} ${user?.lastName} and their data. This cannot be undone.',
+//                       maxLines: 2,
+//                       fontSize: 12.0,
+//                       textAlign: TextAlign.center,
+//                       textColor: AppColors.textColor,
+//                     ),
+//                     CustomTextWidget(
+//                       text: 'Are you sure you want to proceed?',
+//                       maxLines: 2,
+//                       fontWeight: FontWeight.w400,
+//                       textAlign: TextAlign.center,
+//                       textColor: AppColors.textColor,
+//                     ),
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.center,
+//                       children: [
+//                         CustomButton(
+//                           isLoading: isLoading.value,
+//                           backgroundColor: Colors.red,
+//                           textColor: AppColors.textColor,
+//                           buttonText: 'Remove',
+//                           fontSize: 12.0,
+//                           onTap: () async {
+//                             if (user != null) {
+//                               isLoading.value = true;
+//                               await controller
+//                                   .deleteUserInUsersScreen(user, index)
+//                                   .then((value) => Get.back());
+//                               isLoading.value = false;
+//                               Get.back();
+//                             }
+//                           },
+//                         ),
+//                         CustomButton(
+//                           isLoading: false,
+//                           backgroundColor: AppColors.secondaryColor,
+//                           textColor: AppColors.whiteTextColor,
+//                           buttonText: 'Cancel',
+//                           fontSize: 12.0,
+//                           onTap: () => Get.back(),
+//                         ),
+//                       ],
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             );
+//           }),
+//         ),
+//       );
+//     },
+//   );
+// }
 }
